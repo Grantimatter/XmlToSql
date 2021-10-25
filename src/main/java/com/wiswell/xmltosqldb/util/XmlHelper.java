@@ -1,6 +1,8 @@
 package com.wiswell.xmltosqldb.util;
 
 import com.wiswell.xmltosqldb.model.KeyValue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlHelper {
+
+    private static final Logger log = LogManager.getLogger(XmlHelper.class);
 
     /**
      * Get all key value pairs from given xml document
@@ -49,7 +53,7 @@ public class XmlHelper {
             }
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return keyValuePairs;

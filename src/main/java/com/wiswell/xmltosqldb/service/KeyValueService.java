@@ -1,6 +1,7 @@
 package com.wiswell.xmltosqldb.service;
 
 import com.wiswell.xmltosqldb.model.KeyValue;
+import com.wiswell.xmltosqldb.util.DatabaseContextHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class KeyValueService {
         try {
             keyValueRepo.save(keyValue);
         } catch (Exception e) {
-            String message = String.format("Could not add %s to the database", keyValue);
+            String message = String.format("Could not add %s to %s", keyValue, DatabaseContextHolder.getDatabase());
             log.warn(message);
         }
     }

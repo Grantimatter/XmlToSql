@@ -21,25 +21,25 @@ public class Database {
 
         boolean valid = true;
 
-        if(url.length() == 0) {
+        if(url == null || url.length() == 0) {
             String message = String.format("%s does not have a valid url", databaseId);
             log.warn(message);
             valid = false;
         }
 
-        if(username.length() == 0) {
+        if(username == null || username.length() == 0) {
             String message = String.format("%s does not have a valid username", databaseId);
             log.warn(message);
             valid = false;
         }
 
-        if(password.length() == 0) {
+        if(password == null || password.length() == 0) {
             String message = String.format("%s does not have a valid password", databaseId);
             log.warn(message);
             valid = false;
         }
 
-        if(xmlFilepath.length() == 0) {
+        if(xmlFilepath == null || xmlFilepath.length() == 0) {
             String message = String.format("%s does not have a valid xml file", databaseId);
             log.warn(message);
             valid = false;
