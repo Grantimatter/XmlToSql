@@ -1,16 +1,15 @@
 package com.wiswell.xmltosqldb.service;
 
 import com.wiswell.xmltosqldb.model.KeyValue;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import com.wiswell.xmltosqldb.repo.KeyValueRepo;
 
-@Service @EntityScan("com.wiswell.xmltosqldb.*")
-@ComponentScan(basePackages = {"com.wiswell.xmltosqldb.*"})
-@EnableJpaRepositories("com.wiswell.xmltosqldb.*")
+@Service
 public class KeyValueService {
+
+    private final Logger log = LogManager.getLogger(KeyValueService.class);
 
     private final KeyValueRepo keyValueRepo;
 
@@ -22,7 +21,8 @@ public class KeyValueService {
         try {
             keyValueRepo.save(keyValue);
         } catch (Exception e) {
-            System.out.println(String.format("Could not add %s to the database", keyValue));
+            String message = String.format("Could not add %s to the database", keyValue);
+            log.warn(message);
         }
     }
 

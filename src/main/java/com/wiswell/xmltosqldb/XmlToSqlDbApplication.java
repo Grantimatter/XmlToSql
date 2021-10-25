@@ -14,8 +14,6 @@ public class XmlToSqlDbApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(XmlToSqlDbApplication.class, args);
-
         populate.start();
     }
-
 }

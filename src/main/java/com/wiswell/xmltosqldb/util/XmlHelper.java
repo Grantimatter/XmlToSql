@@ -17,8 +17,13 @@ import java.util.List;
 
 public class XmlHelper {
 
+    /**
+     * Get all key value pairs from given xml document
+     * @param filepath the path to the xml document
+     * @return a list of all key value pairs within the xml document
+     */
     public static List<KeyValue> getKeyValuePairs(String filepath) {
-        List<KeyValue> keyValuePairs = new ArrayList();
+        List<KeyValue> keyValuePairs = new ArrayList<>();
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
@@ -29,11 +34,9 @@ public class XmlHelper {
 
             document.getDocumentElement().normalize();
 
-            //System.out.println("Root Element: " + document.getDocumentElement().getNodeName());
-            Element RootElement = document.getDocumentElement();
+            Element rootElement = document.getDocumentElement();
 
-            //NodeList list = document.getElementsByTagName("paths");
-            NodeList allNodes = RootElement.getChildNodes();
+            NodeList allNodes = rootElement.getChildNodes();
 
             for (int i = 0; i < allNodes.getLength(); i++) {
 
@@ -55,32 +58,37 @@ public class XmlHelper {
     /**
      * Get all children from element passed in recursively
      * @param element The element to receive all children from
-     * @return a list of all children of the parent element
+     * @return a list of all children that are of the 'Element' type of the parent Element
      */
     private static void getElementChildren(Element element, List<KeyValue> keyValueList) {
-        //List<KeyValue> keyValuePairList = new ArrayList();
 
         List<Element> childElements = getElementNodesFromList(element.getChildNodes());
 
             if (!childElements.isEmpty()) {
                 for(Element childElement:childElements) {
-                    //List<Element> grandChildElements = getElementNodesFromList(element.getChildNodes());
                     getElementChildren(childElement, keyValueList);
                 }
-                //System.out.println(String.format("%s has child: %s", element.getNodeName(), childElement.getNodeName()));
             } else {
                 String key = element.getNodeName();
                 String value = element.getTextContent();
 
-                KeyValue newKeyValue = new KeyValue(key, value);
-
-                keyValueList.add(newKeyValue);
+                // Only add pair to list if they both exist
+                if(key.length() > 0 && value.length() > 0)
+                {
+                    KeyValue newKeyValue = new KeyValue(key, value);
+                    keyValueList.add(newKeyValue);
+                }
             }
     }
 
+    /**
+     * Takes in a NodeList and finds all nodes of the 'element' type
+     * @param nodeList the NodeList to search for elements
+     * @return a list of all elements within a NodeList
+     */
     private static List<Element> getElementNodesFromList(NodeList nodeList)
     {
-        List<Element> elementList = new ArrayList();
+        List<Element> elementList = new ArrayList<>();
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             if(nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
