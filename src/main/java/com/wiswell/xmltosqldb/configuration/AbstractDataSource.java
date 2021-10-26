@@ -46,18 +46,6 @@ public class AbstractDataSource {
         dbRoutingDataSource.setTargetDataSources(targetDataSources);
         dbRoutingDataSource.setDefaultTargetDataSource(dataSourceList.get(0));
         return dbRoutingDataSource;
-
-        /*
-        Database db = databaseContextHolder.getCurrentDatabase();
-        log.info(String.format("Database: %s", db));
-
-        return DataSourceBuilder.create()
-                .url(db.getUrl())
-                .username(db.getUsername())
-                .password(db.getPassword())
-                .driverClassName("org.postgresql.Driver")
-                .build();
-                */
     }
 
 }

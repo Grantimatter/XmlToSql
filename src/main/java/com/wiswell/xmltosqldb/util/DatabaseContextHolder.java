@@ -8,8 +8,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class DatabaseContextHolder {
@@ -19,11 +21,10 @@ public class DatabaseContextHolder {
     @Getter
     private static List<Database> databaseList = new ArrayList<>();
     private static int currentDatabaseIndex;
-    private final Environment environment;
+    //private final Environment environment;
     private final Logger log = LogManager.getLogger(DatabaseContextHolder.class);
 
-    public DatabaseContextHolder(Environment environment) {
-        this.environment = environment;
+    public DatabaseContextHolder() {
         databaseList = getDatabasesAndFiles();
         set(databaseList.get(0));
     }
@@ -84,10 +85,30 @@ public class DatabaseContextHolder {
     }
 
     private Database getDatabaseFromProperties(String databaseProperty, String xmlProperty) {
-        String databaseUrl = environment.getProperty(String.format("%s.url", databaseProperty));
-        String databaseUsername = environment.getProperty(String.format("%s.username", databaseProperty));
-        String databasePassword = environment.getProperty(String.format("%s.password", databaseProperty));
-        String xmlPath = environment.getProperty(xmlProperty);
+        Properties properties = new Properties();
+        InputStreamReader inputStreamReader = null;
+        try {
+            inputStreamReader = new InputStreamReader(new FileInputStream("config.properties"), "UTF-8");
+            properties.load(inputStreamReader);
+        } catch (IOException e) {
+            log.error("A valid \"config.properties\" file was not found. Please create \"config.properties\" and provide databases and xml documents");
+        }
+        finally {
+            if(inputStreamReader != null) {
+                try {
+                    inputStreamReader.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
+
+        if(properties.size() == 0) return null;
+
+        String databaseUrl = properties.getProperty(String.format("%s.url", databaseProperty));
+        String databaseUsername = properties.getProperty(String.format("%s.username", databaseProperty));
+        String databasePassword = properties.getProperty(String.format("%s.password", databaseProperty));
+        String xmlPath = properties.getProperty(xmlProperty);
 
         return new Database(databaseUrl, databaseUsername, databasePassword, xmlPath);
     }
